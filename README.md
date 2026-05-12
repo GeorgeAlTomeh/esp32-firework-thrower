@@ -4,17 +4,17 @@
 [![Language](https://img.shields.io/badge/language-C%2B%2B-orange)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
 
-## Overview
+## Short Story
+
+I built this as a firework thrower **(it doesn't ignite fireworks)** but you can use it for anything that needs remote movement switching.
 
 This project turns an ESP32 into a **WiFi web server** that lets you control three things from any phone or computer browser:
 
-- **Servo motor** (angle from 0° to 180° via a slider)
-- **Stepper motor** (28BYJ-48 with ULN2003 driver) – move by precise steps or full turns, change speed (RPM) on the fly
-- **A toggle device** (like an LED or relay) – turn it ON/OFF with a coloured button
+- **Servo motor**
+- **Stepper motor** (28BYJ-48 with ULN2003 driver), you can change the speed (RPM)
+- **A toggle device** (like an LED or relay) – turn it ON/OFF with a coloured button (as a **simulation** for an ignition button)
 
 All controls are on one simple HTML page. The stepper moves asynchronously (one step per loop), so the web interface never freezes.
-
-I built this as a general‑purpose motor controller for small robotics projects, but you can use it for anything that needs remote movement switching.
 
 ## Features
 
