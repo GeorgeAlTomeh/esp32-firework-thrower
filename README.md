@@ -77,7 +77,6 @@ All controls are on one simple HTML page. The stepper moves asynchronously (one 
    ```cpp
    const char* ssid = "YourWiFiName";
    const char* password = "YourWiFiPassword";
-```
 
 1. Upload – select the correct ESP32 board and port, then click Upload.
 
