@@ -1,4 +1,3 @@
-```markdown
 # ESP32 Web-Controlled Firework Thrower
 
 [![Platform](https://img.shields.io/badge/platform-ESP32-blue)]()
