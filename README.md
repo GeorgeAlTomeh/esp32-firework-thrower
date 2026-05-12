@@ -72,7 +72,7 @@ I built this as a general‑purpose motor controller for small robotics projects
    - `ESP32Servo.h` (comes with ESP32 package)
    - `Stepper.h` (built‑in)
 
-4. **Get the code** – copy the full sketch from this repository (`motor_control.ino`).
+4. **Get the code** – copy the full sketch from this repository (`sketch.ino`).
 5. **Change WiFi credentials** – edit these lines near the top:
    ```cpp
    const char* ssid = "YourWiFiName";
