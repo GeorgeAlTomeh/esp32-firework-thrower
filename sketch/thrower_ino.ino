@@ -6,21 +6,21 @@
 Servo myservo;
 const int servoPin = 13;
 
-// Stepper (28BYJ-48 with ULN2003)
+// Stepper with driver
 #define STEPS_PER_REV 2048
-#define IN1 19
-#define IN2 18
-#define IN3 5
-#define IN4 15
+#define IN1 33
+#define IN2 25
+#define IN3 26
+#define IN4 27
 Stepper stepper(STEPS_PER_REV, IN1, IN3, IN2, IN4);
 
-// Toggle device (LED/relay)
+// Toggle device (LED, relay, ...)
 const int devicePin = 12;
 bool deviceState = false;   // start OFF
 
 // WiFi
-const char* ssid = "WeaponControl";
-const char* password = "topsecret";
+const char* ssid = "ssidl";
+const char* password = "password";
 WiFiServer server(80);
 
 String header;
@@ -29,7 +29,7 @@ int pos1, pos2;
 
 int stepperStepsToMove = 0;
 int stepperSpeed = 30;
-const int stepperMaxSpeed = 40;
+const int stepperMaxSpeed = 10;
 
 void setup() {
   Serial.begin(115200);
@@ -70,7 +70,6 @@ void loop() {
             client.println("Connection: close");
             client.println();
 
-            // HTML page with extra CSS for toggle button
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
             client.println("<style>");
@@ -82,8 +81,6 @@ void loop() {
             client.println("</style>");
             client.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>");
             client.println("</head><body><h1>ESP32 Motor Control</h1>");
-
-            // ----- Device Toggle Panel (new) -----
             client.println("<div class=\"control-panel\">");
             client.println("<h2>Device Control</h2>");
             client.println("<button id=\"deviceToggle\" class=\"toggle-btn " + String(deviceState ? "on" : "off") + "\" onclick=\"toggleDevice()\">");
@@ -91,14 +88,12 @@ void loop() {
             client.println("</button>");
             client.println("</div>");
 
-            // ----- Servo Panel -----
             client.println("<div class=\"control-panel\">");
             client.println("<h2>Servo</h2>");
             client.println("<p>Position: <span id=\"servoPos\"></span></p>");
             client.println("<input type=\"range\" min=\"0\" max=\"180\" class=\"slider\" id=\"servoSlider\" value=\"" + servoValue + "\">");
             client.println("</div>");
 
-            // ----- Stepper Panel -----
             client.println("<div class=\"control-panel\">");
             client.println("<h2>Stepper</h2>");
             client.println("<button onclick=\"stepperMove(-512)\">-1/4 Turn</button>");
@@ -112,16 +107,13 @@ void loop() {
             client.println("<input type=\"range\" min=\"1\" max=\"" + String(stepperMaxSpeed) + "\" class=\"slider\" id=\"speedSlider\" value=\"" + String(stepperSpeed) + "\">");
             client.println("</div>");
 
-            // JavaScript
             client.println("<script>");
-            // Servo
             client.println("$('#servoSlider').on('input', function() {");
             client.println("  var val = $(this).val();");
             client.println("  $('#servoPos').text(val);");
             client.println("  $.get('/?value=' + val);");
             client.println("});");
             client.println("$('#servoPos').text($('#servoSlider').val());");
-            // Stepper
             client.println("function stepperMove(steps) { $.get('/?stepperMove=' + steps); }");
             client.println("function stepperStop() { $.get('/?stepperStop=1'); }");
             client.println("function stepperSetSpeed(speed) {");
@@ -129,14 +121,12 @@ void loop() {
             client.println("  $.get('/?stepperSpeed=' + speed);");
             client.println("}");
             client.println("$('#speedSlider').on('input', function() { stepperSetSpeed($(this).val()); });");
-            // Toggle device
             client.println("function toggleDevice() {");
             client.println("  $.get('/?toggleDevice=1');");
             client.println("  setTimeout(function(){ location.reload(); }, 100);");
             client.println("}");
             client.println("</script></body></html>");
 
-            // Parse GET requests
             if (header.indexOf("GET /?value=") >= 0) {
               pos1 = header.indexOf('=');
               pos2 = header.indexOf('&');
